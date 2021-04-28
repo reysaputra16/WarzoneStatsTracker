@@ -24,7 +24,7 @@ public class WarzoneData {
     private static String gamertag = "rey%2322347";   //Gamertag ('#' is represented as '%23')
     private static String platform = "battle";     //psn, steam, xbl, battle, uno (ActivisionID), acti (activisionTag)
 
-    public static String obtainWZData() throws Exception{
+    public static String obtainWZData() throws Exception {
 
         //Send request
         HttpResponse<JsonNode> response = Unirest.get(host + mode + gamertag + "/" + platform)
@@ -36,6 +36,17 @@ public class WarzoneData {
 
         return response.getBody().toString();
 
+    }
+
+    public static String obtainWZMatchDetails(String matchId) throws Exception {
+
+        //Send request
+        HttpResponse<String> response = Unirest.get("https://www.callofduty.com/api/papi-client/crm/cod/v2/title/" +
+                "mw/platform/battle/fullMatch/wz/" + matchId + "/it").asString();
+        System.out.println(response.getStatus());
+        System.out.println(response.getHeaders().get("Content-Type"));
+
+        return response.getBody().toString();
     }
 
     public static void printWithPrettyFormat(String response) {

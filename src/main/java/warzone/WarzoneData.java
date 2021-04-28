@@ -1,3 +1,5 @@
+package warzone;
+
 import java.net.URLEncoder;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -8,14 +10,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-/**
- * API Documentation taken from RapidAPI
- */
+public class WarzoneData {
 
-public class Application {
-
-    public static void main(String[] args) throws Exception {
-
+    public static void obtainWZData() throws Exception{
         //Host url
         String host = "https://call-of-duty-modern-warfare.p.rapidapi.com/";
         String mode = "warzone/";
@@ -30,7 +27,7 @@ public class Application {
 
 
         //Send request
-        HttpResponse <JsonNode> response = Unirest.get(host + mode + gamertag + "/" + platform)
+        HttpResponse<JsonNode> response = Unirest.get(host + mode + gamertag + "/" + platform)
                 .header("x-rapidapi-host", x_rapidapi_host)
                 .header("x-rapidapi-key", x_rapidapi_key)
                 .asJson();
@@ -43,5 +40,9 @@ public class Application {
         JsonElement je = jp.parse(response.getBody().toString());
         String prettyJsonString =  gson.toJson(je);
         System.out.println(prettyJsonString);
+
     }
+
+
+
 }

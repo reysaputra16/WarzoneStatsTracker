@@ -12,19 +12,19 @@ import com.google.gson.JsonParser;
 
 public class WarzoneData {
 
-    public static void obtainWZData() throws Exception{
-        //Host url
-        String host = "https://call-of-duty-modern-warfare.p.rapidapi.com/";
-        String mode = "warzone/";
+    //Host url
+    private static String host = "https://call-of-duty-modern-warfare.p.rapidapi.com/";
+    private static String mode = "warzone-matches/";
 
-        //Header request
-        String x_rapidapi_host = "";    //Host taken from RapidAPI
-        String x_rapidapi_key = "";     //KEY taken from RapidAPI
+    //Header request
+    private static String x_rapidapi_host = "call-of-duty-modern-warfare.p.rapidapi.com";    //Host taken from RapidAPI
+    private static String x_rapidapi_key = "fd5ac84f5amsh06f452ea4a4b4fdp179dd7jsn59a6f1274d94";     //KEY taken from RapidAPI
 
-        //Param
-        String gamertag = "";   //Gamertag ('#' is represented as '%23')
-        String platform = "";     //psn, steam, xbl, battle, uno (ActivisionID), acti (activisionTag)
+    //Param
+    private static String gamertag = "rey%2322347";   //Gamertag ('#' is represented as '%23')
+    private static String platform = "battle";     //psn, steam, xbl, battle, uno (ActivisionID), acti (activisionTag)
 
+    public static String obtainWZData() throws Exception{
 
         //Send request
         HttpResponse<JsonNode> response = Unirest.get(host + mode + gamertag + "/" + platform)
@@ -34,12 +34,22 @@ public class WarzoneData {
         System.out.println(response.getStatus());
         System.out.println(response.getHeaders().get("Content-Type"));
 
+        return response.getBody().toString();
+
+    }
+
+    public static void printWithPrettyFormat(String response) {
+
         //Prettifying (information is printed with a better format)
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
-        JsonElement je = jp.parse(response.getBody().toString());
-        String prettyJsonString =  gson.toJson(je);
+        JsonElement je = jp.parse(response);
+        String prettyJsonString = gson.toJson(je);
         System.out.println(prettyJsonString);
+
+    }
+
+    public static void parseWZStats(String response) {
 
     }
 

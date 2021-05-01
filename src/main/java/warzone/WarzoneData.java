@@ -17,8 +17,8 @@ public class WarzoneData {
     private static String mode = "warzone/";
 
     //Header request
-    private static String x_rapidapi_host = "";    //Host taken from RapidAPI
-    private static String x_rapidapi_key = "";     //KEY taken from RapidAPI
+    private static String x_rapidapi_host = "call-of-duty-modern-warfare.p.rapidapi.com";    //Host taken from RapidAPI
+    private static String x_rapidapi_key = "fd5ac84f5amsh06f452ea4a4b4fdp179dd7jsn59a6f1274d94";     //KEY taken from RapidAPI
 
     //Param
     private static String gamertag = "rey%2322347";   //Gamertag ('#' is represented as '%23')

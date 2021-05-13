@@ -23,18 +23,27 @@ public class WarzoneData {
     private static String platform = "battle";     //psn, steam, xbl, battle, uno (ActivisionID), acti (activisionTag)
 
     //BR Stats representation
-    PlayerStats br = new PlayerStats();
-    PlayerStats br_dmz = new PlayerStats();
-    PlayerStats br_all = new PlayerStats();
+    private static PlayerProfile playerProfile = new PlayerProfile();
 
     public static void startProgram() throws Exception {
-
         //System.out.println(WarzoneData.obtainWZMatchDetails("14446166942826623825"));
         String WZData = obtainWZData();
-        System.out.println(WZData);
-        System.out.println("------------------------------------------");
+        String[][] parsedWZData = parseWZStats(WZData);
+        //System.out.println(WZData);
+        //System.out.println("------------------------------------------");
         //WarzoneData.printWithPrettyFormat(WZData);
-        parseWZStats(WZData);
+        dataToPlayerStats(parsedWZData);
+        System.out.println("\n" + playerProfile.toString());
+
+        /*
+        for(int i = 0;i < parsedWZData.length;i++) {
+            for(int j = 0;j < parsedWZData[i].length;j++) {
+                System.out.println(parsedWZData[i][j]);
+            }
+            System.out.println("--------------");
+        }
+         */
+
     }
 
     public static String obtainWZData() throws Exception {
@@ -96,7 +105,7 @@ public class WarzoneData {
                 categoryBracket = i + 1;
                 currentBracket++;
             } else if(response.charAt(i) == '}' && currentBracket == 2) {
-                StringWZStats[currentCategory] = response.substring(categoryBracket, i - 1);
+                StringWZStats[currentCategory] = response.substring(categoryBracket, i);
                 currentCategory++;
                 currentBracket--;
             } else if(response.charAt(i) == '{' && currentBracket == 1) {
@@ -110,5 +119,54 @@ public class WarzoneData {
         }
 
         return splittedStrings;
+    }
+
+    public static void dataToPlayerStats(String[][] data) {
+        String[] currentStat;
+        for(int i = 0;i < data.length;i++) {
+            for(int j = 0;j < data[i].length;j++) {
+                currentStat = data[i][j].split(":");
+                addPlayerStats(i, currentStat);
+            }
+        }
+    }
+
+    public static void addPlayerStats(int statNumber, String[] currentStat) {
+
+        if(currentStat[0].equals("\"wins\"")) {
+            playerProfile.allStats[statNumber].wins = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"kills\"")) {
+            playerProfile.allStats[statNumber].kills = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"kdRatio\"")) {
+            playerProfile.allStats[statNumber].kd_ratio = Double.parseDouble(currentStat[1]);
+        } else if(currentStat[0].equals("\"downs\"")) {
+            playerProfile.allStats[statNumber].downs = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"topTwentyFive\"")) {
+            playerProfile.allStats[statNumber].top_twenty_five = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"topTen\"")) {
+            playerProfile.allStats[statNumber].top_ten = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"contracts\"")) {
+            playerProfile.allStats[statNumber].contracts = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"title\"")) {
+            playerProfile.allStats[statNumber].title = currentStat[1];
+        } else if(currentStat[0].equals("\"revives\"")) {
+            playerProfile.allStats[statNumber].revives = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"topFive\"")) {
+            playerProfile.allStats[statNumber].top_five = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"score\"")) {
+            playerProfile.allStats[statNumber].score = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"timePlayed\"")) {
+            playerProfile.allStats[statNumber].time_played = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"gamesPlayed\"")) {
+            playerProfile.allStats[statNumber].games_played = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"tokens\"")) {
+            playerProfile.allStats[statNumber].tokens = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"scorePerMinute\"")) {
+            playerProfile.allStats[statNumber].score_per_minute = Double.parseDouble(currentStat[1]);
+        } else if(currentStat[0].equals("\"cash\"")) {
+            playerProfile.allStats[statNumber].cash = Integer.parseInt(currentStat[1]);
+        } else if(currentStat[0].equals("\"deaths\"")) {
+            playerProfile.allStats[statNumber].deaths = Integer.parseInt(currentStat[1]);
+        }
     }
 }
